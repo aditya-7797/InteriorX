@@ -1,14 +1,33 @@
 
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Navbar from '../components/Navbar';
+
+import Home from '../pages/Home';
+import Products from '../pages/Products';
+import Signup from '../pages/SignUp';
+import Designers from '../pages/Designers';
+import Designs from '../pages/Designs';
+import Login from '../pages/Login';
 
 function App() {
 
   return (
     <>
-      
-      <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>      
+    <Router>
+      <Navbar/>
+      <div className='p-4'>
+      <Routes>
+        <Route path='/' element={<Home/>} ></Route>
+        <Route path='/products' element={<Products/>} ></Route>
+        <Route path='/designers' element={<Designers/>} ></Route>
+        <Route path='/designs' element={<Designs/>} ></Route>
+        <Route path='/login' element={<Login/>} ></Route>
+        <Route path='/signup' element={<Signup/>} ></Route>
+      </Routes>
+      </div>
+    </Router>
     </>
   )
 }
