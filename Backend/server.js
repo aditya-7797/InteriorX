@@ -7,6 +7,7 @@ const cors = require("cors");
 const app = express();
 
 const router = require("./Router/auth-router");
+const router2 = require("./Router/submission-route");
 
 
 const corsOptions = {
@@ -18,8 +19,12 @@ const corsOptions = {
 // ✅ Configure CORS properly
 app.use(cors(corsOptions)); // Allow all origins (Customize for security)
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/",router);
+
+app.use("/auth",router);
+app.use("/sub",router2);
+
 
 
 // ✅ Check if MONGO_URI exists
@@ -30,18 +35,13 @@ if (!mongoUri) {
 }
 
 // ✅ Connect to MongoDB
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUri)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => {
     console.error("❌ MongoDB Connection Failed:", err);
     process.exit(1); // Stop server on DB connection failure
   });
 
-// ✅ Sample API route
-app.get("/api/data", (req, res) => {
-  res.json({ message: "Hello from Express Backend!" });
-});
 
-// ✅ Start the server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`🚀 Express Server Running on port ${PORT}`));
