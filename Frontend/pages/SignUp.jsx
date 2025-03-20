@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../useAuth"; // Import the hook
+import { useAuth } from "../useAuth";
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -25,9 +25,9 @@ const Signup = () => {
 
     let apiRoute = "";
     if (role === "user") {
-      apiRoute = "http://localhost:5001/auth/user/signup";
+      apiRoute = "http://localhost:5001/auth/signup/user";
     } else if (role === "seller") {
-      apiRoute = "http://localhost:5001/auth/signup/seller"; // ✅ Correct route
+      apiRoute = "http://localhost:5001/auth/signup/seller";
     } else if (role === "designer") {
       apiRoute = "http://localhost:5001/auth/signup/designer";
     }
@@ -39,7 +39,7 @@ const Signup = () => {
         body: JSON.stringify({
           username: user.username,
           email: user.email,
-          phone: user.mobileno, // ✅ Change mobileno to phone
+          phone: user.mobileno, 
           password: user.password,
           role,
         }),
