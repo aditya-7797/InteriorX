@@ -180,7 +180,7 @@ router.post("/signup/designer", async (req, res) => {
 
         // ✅ Generate JWT token securely
         const token = jwt.sign(
-            { userId: newUser._id },
+            { userId: newDesigner._id },
             process.env.JWT_SECRET_KEY,
             { expiresIn: "30d" }
         );

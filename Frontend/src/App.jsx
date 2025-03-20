@@ -1,6 +1,8 @@
 
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ImageSearch from "../ImageSearch"; // Import the component
+
 
 import Navbar from '../components/Navbar';
 
@@ -25,6 +27,8 @@ function App() {
         <Route path='/designs' element={<Designs/>} ></Route>
         <Route path='/login' element={<Login/>} ></Route>
         <Route path='/signup' element={<Signup/>} ></Route>
+        <Route path="/image-search" element={<ImageSearch />} />  {/* Image Search Page */}
+
       </Routes>
       </div>
     </Router>
