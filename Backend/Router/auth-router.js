@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config(); // Import dotenv
+require("dotenv").config(); 
 
 const User = require("../models/userModel");
 const Seller = require("../models/sellerModel");
@@ -11,28 +11,23 @@ const Designer = require("../models/designerModel");
 
 router.post("/signup/user", async (req, res) => {
     try {
-        // ✅ Corrected "mobileno" → "phone"
+        
         const { username, email, phone, password } = req.body;
 
-        // ✅ Validate all required fields
         if (!username || !email || !phone || !password) {
             return res.status(400).json({ msg: "All fields are required" });
         }
 
-        // ✅ Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ msg: "Email already registered" });
         }
 
-        // ✅ Hash the password correctly
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // ✅ Create a new user with correct fields
         const newUser = new User({ username, email, phone, password: hashedPassword });
         await newUser.save();
 
-        // ✅ Generate JWT token securely
         const token = jwt.sign(
             { userId: newUser._id },
             process.env.JWT_SECRET_KEY,
@@ -178,7 +173,6 @@ router.post("/signup/designer", async (req, res) => {
         const newDesigner = new Designer({ username, email, phone, password: hashedPassword });
         await newDesigner.save();
 
-        // ✅ Generate JWT token securely
         const token = jwt.sign(
             { userId: newDesigner._id },
             process.env.JWT_SECRET_KEY,

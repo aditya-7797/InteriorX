@@ -8,6 +8,8 @@ dataset/images/*
 
 dataset/
 
-
+ML/captions.json
+ML/image_filenames.pkl
+ML/image_retrieval_model.pkl
 
 
