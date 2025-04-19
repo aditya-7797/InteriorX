@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../useAuth";
 
+
 const Signup = () => {
   const [user, setUser] = useState({
     username: "",
@@ -13,6 +14,8 @@ const Signup = () => {
   const [role, setRole] = useState("user"); // Default role
   const navigate = useNavigate();
   const { storeTokenInLS } = useAuth();
+  const { storeEmailInLS } = useAuth();
+
   // ✅ Call useAuth correctly
 
   const handleInput = (e) => {
@@ -49,7 +52,11 @@ const Signup = () => {
       if (response.ok) {
         console.log("Response from server:", res_data);
         storeTokenInLS(res_data.token);
-        navigate("/login");
+        storeEmailInLS(res_data.email);
+        if(role == user){
+          navigate("/");
+        }
+        
       } else {
         console.error("Registration failed:", res_data.msg);
       }
@@ -142,6 +149,7 @@ const Signup = () => {
         {/* Login Link */}
         <p className="text-center text-gray-600 mt-4">
           Already have an account?{" "}
+          
           <Link to="/login" className="text-blue-500 hover:underline">
             Login
           </Link>

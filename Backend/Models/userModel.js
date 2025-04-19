@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    designPreferences: {
+        type: [String], 
+        default: [],
+    },
 }, { timestamps: true }); // ✅ Adds createdAt & updatedAt automatically
 
 // ✅ Correctly define and export the model
