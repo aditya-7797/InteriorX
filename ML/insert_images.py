@@ -1,10 +1,11 @@
 import os
 from pymongo import MongoClient
 
-# Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+
+client = MongoClient("mongodb+srv://aditya_admin_ecom:Sarkar3355@ecomcluster.gi0h5.mongodb.net/image_database?retryWrites=true&w=majority&appName=EcomCluster")
 db = client["image_database"]
 collection = db["image_metadata"]
+
 
 # Folder where images are stored
 image_folder = "/INTERIORX/dataset/images/images"
