@@ -6,6 +6,7 @@ const Product = require("../Models/productModel");
 const Designer = require("../models/designerModel");
 const UserRequirement = require("../Models/user_requirementModel");
 const User = require("../Models/userModel");
+const Seller = require("../Models/sellerModel");
 
 const router = express.Router();
 
@@ -15,20 +16,25 @@ const upload = multer({ storage: storage });
 router.post("/submit-design", upload.single("img1"), async (req, res) => {
   try {
     const { email, design_name, description, category, price } = req.body;
-    let { productIds } = req.body;
+    let { designProducts } = req.body;
 
-    console.log("Received productIds:", productIds);
+    console.log("Incoming request body:", req.body); // Log the entire request body
+    console.log("Received email:", email);
+
+    console.log("Received productIds:", designProducts);
 
     // Properly parse productIds
     let productIdArray = [];
-    if (typeof productIds === "string") {
-      productIdArray = productIds.split(","); // Convert string '1,2,3,4' into [1,2,3,4]
-    } else if (Array.isArray(productIds)) {
-      productIdArray = productIds; // Already an array, no change needed
+    if (typeof designProducts === "string") {
+      productIdArray = designProducts.replace(/[{}]/g, "").split(",");
+    }
+     else if (Array.isArray(designProducts)) {
+      productIdArray = designProducts; // Already an array, no change needed
     }
 
-    const designer = await Designer.findOne({ email });
-
+    const normalizedEmail = email.trim().toLowerCase();
+    const designer = await Designer.findOne({ email: normalizedEmail });
+    
     if (!designer) {
       return res.status(400).json({ message: "Unregistered designer" });
     }
@@ -50,38 +56,6 @@ router.post("/submit-design", upload.single("img1"), async (req, res) => {
     res.status(201).json({ message: "Design submitted successfully!" });
   } catch (error) {
     console.error(error); // Always good to log error
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.post("/submit-product", upload.single("img"), async (req, res) => {
-  try {
-    const { email, description, productname, category, price } = req.body;
-
-    const lastProduct = await Product.findOne().sort({ productid: -1 }).exec();
-    const newProductId = lastProduct ? lastProduct.productid + 1 : 1;
-
-    const newProduct = new Product({
-      productid: newProductId, // <-- no need toString now
-      email,
-      description,
-      img: {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      },
-      productname,
-      category,
-      price,
-    });
-
-    await newProduct.save();
-    res
-      .status(201)
-      .json({
-        message: "Product submitted successfully!",
-        productid: newProductId,
-      });
-  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });

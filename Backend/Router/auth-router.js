@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config(); 
 
 const User = require("../Models/userModel");
-const Seller = require("../models/sellerModel");
+const Seller = require("../Models/sellerModel");
 const Designer = require("../models/designerModel");
 
 
@@ -82,6 +82,7 @@ router.post("/login/user",async (req,res) => {
         res.status(500).json({ msg: "Server error" });
     }
 });
+
 
 router.post("/signup/seller", async (req, res) => {
     try {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../useAuth";
+import Navbar from "../components/Navbar"; // Adjust the import path as necessary
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -10,8 +11,8 @@ const Login = () => {
 
   const [role, setRole] = useState("user"); // Default role
   const navigate = useNavigate();
-  const { storeTokenInLS } = useAuth();
-  const { storeEmailInLS } = useAuth();
+  const { storeTokenInLS, storeEmailInLS } = useAuth();
+
 
 
   const handleSubmit = async (e) => {
@@ -40,20 +41,26 @@ const Login = () => {
       const res_data = await response.json();
       if (response.ok) {
         console.log("Response from server:", res_data);
-        storeTokenInLS(res_data.token); 
-        storeEmailInLS(res_data.user.email); 
+        // console.log("Response from server:", res_data.token);
+        // console.log("Response from server:", res_data.email);
 
         // Assuming this is only for token
         // Navigate based on role
         if (role === "user") {
+          storeTokenInLS(res_data.token); 
+          storeEmailInLS(res_data.email); 
           const hasSubmitted = localStorage.getItem("preferencesSubmitted");
           if (!hasSubmitted) {
             localStorage.setItem("showStylePopup", "true");
           }
           navigate("/");
         } else if (role === "seller") {
+          storeTokenInLS(res_data.token); 
+          storeEmailInLS(res_data.seller.email); 
           navigate("/seller_home");
         } else if (role === "designer") {
+          storeTokenInLS(res_data.token); 
+          storeEmailInLS(res_data.designer.email); 
           navigate("/designer_home");
         }
       } else {
@@ -65,10 +72,13 @@ const Login = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="flex justify-center items-center h-screen bg-gray-100">
+
+
       <div className="bg-white p-6 rounded-2xl shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-4">LOGIN</h2>
-
         <form onSubmit={handleSubmit}>
           {/* Role Dropdown */}
           <div className="mb-4">
@@ -128,6 +138,7 @@ const Login = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

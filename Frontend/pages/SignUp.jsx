@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../useAuth";
+import Navbar from "../components/Navbar"; // Adjust the import path as necessary
 
 
 const Signup = () => {
@@ -15,8 +16,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const { storeTokenInLS } = useAuth();
   const { storeEmailInLS } = useAuth();
-
-  // ✅ Call useAuth correctly
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -53,9 +52,16 @@ const Signup = () => {
         console.log("Response from server:", res_data);
         storeTokenInLS(res_data.token);
         storeEmailInLS(res_data.email);
-        if(role == user){
-          navigate("/");
+        if(role == "user"){
+          navigate("/login");
         }
+        else if(role == "seller"){
+          navigate("/login");
+        }
+        else if(role == "designer"){
+          navigate("/login");
+        }
+        alert("Registration successful! Please log in.");
         
       } else {
         console.error("Registration failed:", res_data.msg);
@@ -66,6 +72,10 @@ const Signup = () => {
   };
 
   return (
+
+    <>
+      <Navbar />
+    
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-4">SIGN UP</h2>
@@ -156,6 +166,7 @@ const Signup = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

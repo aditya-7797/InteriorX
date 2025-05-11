@@ -12,13 +12,14 @@ import Signup from '../pages/SignUp';
 import Designers from '../pages/Designers';
 import Designs from '../pages/Designs';
 import Login from '../pages/Login';
+import AddProducts from '../pages/addProducts';
+import SellerHome from '../pages/sellerHome';
 
 function App() {
 
   return (
     <>
     <Router>
-      <Navbar/>
       <div className='p-4'>
       <Routes>
         <Route path='/' element={<Home/>} ></Route>
@@ -28,7 +29,10 @@ function App() {
         <Route path='/login' element={<Login/>} ></Route>
         <Route path='/signup' element={<Signup/>} ></Route>
         <Route path="/image-search" element={<ImageSearch />} />  {/* Image Search Page */}
-
+        <Route path="/submit_product" element={<AddProducts />} />
+        <Route path="/seller_home" element={<SellerHome />} /> 
+        <Route path="/add_product" element={<AddProducts />} />
+``
       </Routes>
       </div>
     </Router>

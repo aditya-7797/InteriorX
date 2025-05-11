@@ -8,6 +8,7 @@ const app = express();
 
 const router = require("./Router/auth-router");
 const router2 = require("./Router/submission-route");
+const productRouter = require("./Router/product-router"); // Import product router
 
 
 const corsOptions = {
@@ -24,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth",router);
 app.use("/sub",router2);
+app.use("/products", productRouter); // Product-related routes
+
 
 
 

@@ -5,6 +5,7 @@ import StylePopup from "../components/StylePopup";
 // import bg from "../src/assets/images/bg.jpeg";
 import HeroPng from '../src/assets/images/hero.png';
 import { SlideUp } from '../src/animation/animate';
+import Navbar from '../components/Navbar';
 
 function Home() {
     console.log("Home Component Loaded");
@@ -27,6 +28,7 @@ function Home() {
 
     return (
         <>
+            <Navbar />
 
             {/* Popup */}
             {showPopup && (
