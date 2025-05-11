@@ -51,7 +51,7 @@ Contributions are welcome! To contribute:
 
 ## 📩 Contact
 For any queries or collaboration opportunities:
-- 📧 **Email:** [adityavaibhavpawar@gmail.com](mailto:adityashinde7987@gmail.com)
+- 📧 **Email:** [adityashinde7987@gmail.com](mailto:adityashinde7987@gmail.com)
 - 💼 **LinkedIn:** [Aditya Shinde](https://www.linkedin.com/in/aditya-shinde-b14216231/)
 
 ---
