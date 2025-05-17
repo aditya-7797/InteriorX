@@ -24,7 +24,7 @@ const SellerNavbar = () => {
   return (
     <nav className="bg-white shadow-md p-4 flex justify-center space-x-6">
       <NavLink to="/seller_home" className={linkStyle}>Dashboard</NavLink>
-      <NavLink to="/seller/listings" className={linkStyle}>My Listings</NavLink>
+      <NavLink to="/view_requirement" className={linkStyle}>View User Requirements</NavLink>
       <NavLink to="/add_product" className={linkStyle}>Add Product</NavLink>
       <div>
               {(authtoken || user_email) ? (

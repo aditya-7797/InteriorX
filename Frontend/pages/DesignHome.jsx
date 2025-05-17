@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 
-function Designers() {
+function DesignHome() {
   return (
     <div>
       <Navbar />
@@ -10,4 +10,4 @@ function Designers() {
   );
 }
 
-export default Designers;
+export default DesignHome;

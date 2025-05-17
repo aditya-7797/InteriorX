@@ -1,9 +1,10 @@
 import React from 'react';
-
+import DesignerNavbar_User from '../components/DesignerNavbar_User';
 function Designs() {
   return (
     <div>
-            <Navbar />
+      
+      <DesignerNavbar_User />
 
       <h1>Designs</h1>
     </div>

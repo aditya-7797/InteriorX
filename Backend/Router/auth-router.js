@@ -8,7 +8,6 @@ const User = require("../Models/userModel");
 const Seller = require("../Models/sellerModel");
 const Designer = require("../models/designerModel");
 
-
 router.post("/signup/user", async (req, res) => {
     try {
         
@@ -207,7 +206,7 @@ router.post("/login/designer",async (req,res) => {
             console.log("❌ Designer not found in database ,enter mail correctly");
             return res.status(400).json({ msg: "Designer not found" });
         }
-            const isMatch = await bcrypt.compare(password, user.password);
+            const isMatch = await bcrypt.compare(password, designer.password);
 
             if (!isMatch) {
                 console.log("❌ Invalid Credentials - Password mismatch");
@@ -218,7 +217,7 @@ router.post("/login/designer",async (req,res) => {
 
             const token = jwt.sign({ id: designer._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
 
-        return res.json({ token, user: { id: designer._id, email: designer.email } });
+        return res.json({ token, designer: { id: designer._id, email: designer.email } });
         }
 
         catch (error) {
