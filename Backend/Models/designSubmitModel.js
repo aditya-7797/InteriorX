@@ -1,13 +1,18 @@
 const mongoose = require("mongoose");
 
 const designSumbitSchema = new mongoose.Schema({
+
+    designer_name:{
+        type: String,
+        required: true
+    },
     
     email: {
         type: String,
         required: true
     },
 
-    img1: { 
+    img: { 
         data: Buffer, 
         contentType: String 
     }, 

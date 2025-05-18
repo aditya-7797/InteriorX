@@ -15,6 +15,7 @@ import Login from '../pages/Login';
 import AddProducts from '../pages/addProducts';
 import SellerHome from '../pages/sellerHome';
 import Generate_Design from '../pages/Generate_Designs';
+import AddDesign from '../pages/addDesign';
 
 function App() {
 
@@ -34,7 +35,8 @@ function App() {
         <Route path="/seller_home" element={<SellerHome />} /> 
         <Route path="/add_product" element={<AddProducts />} />
         <Route path="/generate_design" element={<Generate_Design />} />
-``
+        <Route path="/submit_design" element={<AddDesign />} />
+
       </Routes>
       </div>
     </Router>

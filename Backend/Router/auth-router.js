@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const User = require("../Models/userModel");
 const Seller = require("../Models/sellerModel");
-const Designer = require("../models/designerModel");
+// const Designer = require("../models/designerModel");
 
 router.post("/signup/user", async (req, res) => {
     try {

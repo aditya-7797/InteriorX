@@ -20,6 +20,9 @@ const designerSchema = new mongoose.Schema({
     },
 }, { timestamps: true }); // ✅ Adds createdAt & updatedAt automatically
 
+
+
 // ✅ Correctly define and export the model
-const Designer = mongoose.model("Designer", designerSchema);
+const Designer = mongoose.models.Designer || mongoose.model("Designer", designerSchema);
+
 module.exports = Designer;

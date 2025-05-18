@@ -9,6 +9,7 @@ const app = express();
 const router = require("./Router/auth-router");
 const router2 = require("./Router/submission-route");
 const productRouter = require("./Router/product-router"); // Import product router
+const designRouter = require("./Router/design-router"); // Import design router
 
 
 const corsOptions = {
@@ -26,8 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth",router);
 app.use("/sub",router2);
 app.use("/products", productRouter); // Product-related routes
-
-
+app.use("/designs", designRouter); // Design-related routes
 
 
 // ✅ Check if MONGO_URI exists
@@ -48,3 +48,4 @@ mongoose.connect(mongoUri)
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`🚀 Express Server Running on port ${PORT}`));
+

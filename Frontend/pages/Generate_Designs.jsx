@@ -20,14 +20,18 @@ const CardComponent = ({ title, onClick }) => (
 );
 
 const Generate_Design = () => {
+
+  const navigate = useNavigate();
   const handleViewDesign = () => {
     console.log("Navigating to View Design page");
-    navigate("/image_search")
+    navigate("/image-search")
   };
 
   const handleGenerateDesign = () => {
     console.log("Navigating to Generate Design page");
-    // implement navigation or action
+    window.open("http://localhost:8501", "_blank");
+    console.log("djjhsjhskhxksh")
+
   };
 
   return (
