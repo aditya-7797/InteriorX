@@ -40,7 +40,12 @@ category:{
 price: {
     type:String,
     required: true
+},
+ model3D: {
+  data: Buffer,
+  contentType: String,
 }
+
 
 });
 

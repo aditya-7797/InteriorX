@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const designSumbitSchema = new mongoose.Schema({
 
+
+    designid: {
+        type: String,   
+        required: true
+    },
+
     designer_name:{
         type: String,
         required: true

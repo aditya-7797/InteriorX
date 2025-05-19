@@ -48,7 +48,7 @@ const Login = () => {
         // Navigate based on role
         if (role === "user") {
           storeTokenInLS(res_data.token); 
-          storeEmailInLS(res_data.email); 
+          storeEmailInLS(res_data.user.email); 
           const hasSubmitted = localStorage.getItem("preferencesSubmitted");
           if (!hasSubmitted) {
             localStorage.setItem("showStylePopup", "true");

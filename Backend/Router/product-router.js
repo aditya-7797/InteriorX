@@ -9,42 +9,45 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // CREATE: Add product
-router.post("/", upload.single("img"), async (req, res) => {
+router.post("/", upload.fields([
+  { name: "img", maxCount: 1 },
+  { name: "model3D", maxCount: 1 }
+]), async (req, res) => {
   try {
-    const {sellername, email, description, productname, category, price } = req.body;
+    const { sellername, email, description, productname, category, price } = req.body;
 
     const lastProduct = await Product.findOne().sort({ productid: -1 }).exec();
     const newProductId = lastProduct ? lastProduct.productid + 1 : 1;
 
-    // const normalizedEmail = email.trim().toLowerCase();
-    // const seller = await Seller.findOne({ email: normalizedEmail });
-    
-    // if (!seller) {
-    //   return res.status(400).json({ message: "Unregistered seller" });
-    // }
+    const imageFile = req.files['img']?.[0];
+    const modelFile = req.files['model3D']?.[0];
 
     const newProduct = new Product({
-      productid: newProductId, // <-- no need toString now
+      productid: newProductId,
       sellername,
       email,
       description,
       img: {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
+        data: imageFile.buffer,
+        contentType: imageFile.mimetype,
       },
       productname,
       category,
       price,
+      model3D: {
+        data: modelFile.buffer,
+        contentType: modelFile.mimetype,
+      }
     });
 
     await newProduct.save();
-    res
-      .status(201)
-      .json({
-        message: "Product submitted successfully!",
-        productid: newProductId,
-      });
+
+    res.status(201).json({
+      message: "Product submitted successfully!",
+      productid: newProductId,
+    });
   } catch (error) {
+    console.error("Error uploading product:", error);
     res.status(500).json({ error: error.message });
   }
 });

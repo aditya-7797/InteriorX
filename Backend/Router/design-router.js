@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Product = require("../Models/productModel");
 const DesignSubmit = require("../Models/designSubmitModel");
 const multer = require("multer");
 const Designer = require("../Models/designerModel");
-
 
 // Multer config
 const storage = multer.memoryStorage();
@@ -13,36 +11,42 @@ const upload = multer({ storage: storage });
 
 router.post("/", upload.single("img"), async (req, res) => {
   try {
-    const { designer_name,email, design_name, description, category, price } = req.body;
+    const { designer_name, email, design_name, description, category, price } =
+      req.body;
     let { designProducts } = req.body;
 
-    console.log("Incoming request body:", req.body); // Log the entire request body
-    console.log("Received email:", email);
-
-    console.log("Received productIds:", designProducts);
-
-    // Properly parse productIds
-    let productIdArray = [];
-    if (typeof designProducts === "string") {
-      productIdArray = designProducts.replace(/[{}]/g, "").split(",");
+    // Check if req.file exists
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required." });
     }
-     else if (Array.isArray(designProducts)) {
-      productIdArray = designProducts; // Already an array, no change needed
+
+    // Parse designProducts properly
+    let productIdArray = [];
+    // Backend
+    if (typeof designProducts === "string") {
+      productIdArray = JSON.parse(designProducts);
+    } else if (Array.isArray(designProducts)) {
+      productIdArray = designProducts;
     }
 
     const normalizedEmail = email.trim().toLowerCase();
     const designer = await Designer.findOne({ email: normalizedEmail });
-    
     if (!designer) {
       return res.status(400).json({ message: "Unregistered designer" });
     }
 
+    const lastDesign = await DesignSubmit.findOne()
+      .sort({ designid: -1 })
+      .exec();
+    const newDesignId = lastDesign ? lastDesign.designid + 1 : 1;
+
     const newDesign = new DesignSubmit({
-    designer_name,  
+      designid: newDesignId,
+      designer_name,
       email,
       design_name,
       description,
-      img1: {
+      img: {
         data: req.file.buffer,
         contentType: req.file.mimetype,
       },
@@ -52,9 +56,14 @@ router.post("/", upload.single("img"), async (req, res) => {
     });
 
     await newDesign.save();
-    res.status(201).json({ message: "Design submitted successfully!" });
+    res
+      .status(201)
+      .json({
+        message: "Design submitted successfully!",
+        design_id: newDesignId,
+      });
   } catch (error) {
-    console.error(error); // Always good to log error
+    console.error("❌ Error in /designs POST:", error); // <-- Make sure you see this on server console
     res.status(500).json({ error: error.message });
   }
 });
@@ -63,34 +72,48 @@ router.get("/", async (req, res) => {
   try {
     const designs = await DesignSubmit.find();
 
-    const formattedDesigns = designs.map((product) => {
+    const formattedDesigns = designs.map((design) => {
       let base64Image = null;
 
-      if (product.img?.data) {
-        const buffer = product.img.data;
-        const mimeType = product.img.contentType;
-        base64Image = `data:${mimeType};base64,${buffer.toString("base64")}`;
+      if (design.img?.data && design.img?.contentType) {
+        let buffer;
+
+        if (Buffer.isBuffer(design.img.data)) {
+          buffer = design.img.data;
+        } else if (design.img.data?.data) {
+          buffer = Buffer.from(design.img.data.data); // Mongoose Binary
+        } else {
+          buffer = Buffer.from([]); // fallback
+        }
+
+        base64Image = `data:${design.img.contentType};base64,${buffer.toString(
+          "base64"
+        )}`;
       }
 
       return {
-        _id: product._id,
-        designer_name: product.designer_name,
-        email: product.email,
-        design_name: product.design_name, // ✅ Fix here
-        description: product.description,
-        category: product.category,
-        price: product.price,
+        _id: design._id,
+        designid: design.designid, // ✅ match schema field name
+        designer_name: design.designer_name,
+        email: design.email,
+        design_name: design.design_name,
+        description: design.description,
+        category: design.category,
+        price: design.price,
+        designProducts: design.designProducts,
         img: base64Image,
       };
     });
 
     res.status(200).json(formattedDesigns);
   } catch (error) {
-    console.error("❌ Error fetching design:", error);
-    res.status(500).json({ message: "Server error while fetching products", error });
+    console.error("❌ Error fetching designs:", error);
+    res.status(500).json({
+      message: "Server error while fetching designs",
+      error: error.message,
+    });
   }
 });
 
 
 module.exports = router;
-

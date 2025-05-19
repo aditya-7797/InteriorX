@@ -16,6 +16,7 @@ import AddProducts from '../pages/addProducts';
 import SellerHome from '../pages/sellerHome';
 import Generate_Design from '../pages/Generate_Designs';
 import AddDesign from '../pages/addDesign';
+import Viewer3D from '../pages/Viewer3D';
 
 function App() {
 
@@ -36,6 +37,9 @@ function App() {
         <Route path="/add_product" element={<AddProducts />} />
         <Route path="/generate_design" element={<Generate_Design />} />
         <Route path="/submit_design" element={<AddDesign />} />
+        <Route path="/design_home" element={<DesignHome />} />
+        <Route path="/view3d" element={<Viewer3D />} />
+
 
       </Routes>
       </div>

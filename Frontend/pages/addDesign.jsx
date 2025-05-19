@@ -73,13 +73,15 @@ const AddDesigns = () => {
 
   const resetForm = () => {
     setFormData({
-      designer_name: "",
-      email: "",
-      design_name: "",
-      description: "",
-      category: "",
-      price: "",
-    });
+  designer_name: "",
+  email: "",
+  design_name: "",
+  description: "",
+  category: "",
+  price: "",
+  designProducts: "", // ✅ Add this
+});
+
     setImg(null);
     setPreview(null);
     document.getElementById("file-input").value = "";
@@ -154,13 +156,15 @@ const AddDesigns = () => {
         <label htmlFor="file-input" className="block mb-2">
           Upload Design Image/
         </label>
-        <input
-          id="file-input"
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full p-2 border rounded"
-        />
+       <input
+  id="file-input"
+  type="file"
+  name="img" // ✅ Required
+  accept="image/*"
+  onChange={handleImageChange}
+  className="w-full p-2 border rounded"
+/>
+
 
         {preview && (
           <img
