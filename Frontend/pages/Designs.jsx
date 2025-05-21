@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import DesignerNavbar_User from "../components/DesignerNavbar_User";
 
 const Designs = () => {
   const [designs, setDesigns] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDesigns = async () => {
@@ -43,18 +46,31 @@ const Designs = () => {
                   {design.design_name}
                 </h2>
                 <p className="text-gray-600">
-                  <span className="font-medium">Category:</span> {design.category}
+                  <span className="font-medium">Category:</span>{" "}
+                  {design.category}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-medium">Description:</span> {design.description}
+                  <span className="font-medium">Description:</span>{" "}
+                  {design.description}
                 </p>
                 <p className="text-gray-800 font-semibold">₹{design.price}</p>
                 <p className="text-gray-600">
-                  <span className="font-medium">Designer:</span> {design.designer_name}
+                  <span className="font-medium">Designer:</span>{" "}
+                  {design.designer_name}
                 </p>
                 <p className="text-gray-600">
                   <span className="font-medium">Email:</span> {design.email}
                 </p>
+                <button
+                  onClick={() =>
+                    navigate("/products-by-design", {
+                      state: { designProductIds: design.designProducts },
+                    })
+                  }
+                  className="text-blue-600 font-semibold"
+                >
+                  Show Products
+                </button>
               </div>
             </div>
           ))}

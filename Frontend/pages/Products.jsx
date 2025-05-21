@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
@@ -33,7 +32,7 @@ const Products = () => {
               <img
                 src={product.img}
                 alt={product.productname}
-                className="h-64 w-full object-cover"
+                className="h-84 w-full object-cover"
               />
               <div className="p-4 space-y-2">
                 <h2 className="text-xl font-semibold text-gray-800">
@@ -56,12 +55,7 @@ const Products = () => {
                   <span className="font-medium">Email:</span> {product.email}
                 </p>
 
-                <button
-                  onClick={() => navigate(`/view3d?model=${product.model3D}`)}
-                  className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200"
-                >
-                  3D View
-                </button>
+                
               </div>
             </div>
           ))}

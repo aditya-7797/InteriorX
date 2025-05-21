@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import SellerNavbar from "../components/sellerNavbar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AddProducts = () => {
-
-  const navigate = useNavigate(); // ✅ define navigate
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     sellername: "",
@@ -16,7 +15,6 @@ const AddProducts = () => {
   });
 
   const [img, setImg] = useState(null);
-  const [model3D, setModel3D] = useState(null);
   const [preview, setPreview] = useState(null);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -65,15 +63,6 @@ const AddProducts = () => {
     }
   };
 
-  const handleModelChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.name.endsWith(".glb")) {
-      setModel3D(file);
-    } else {
-      alert("Please upload a valid .glb model file.");
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -89,15 +78,6 @@ const AddProducts = () => {
 
     if (img) {
       data.append("img", img);
-    }
-
-    if (!model3D && !editingId) {
-      alert("Please upload a 3D model!");
-      return;
-    }
-
-    if (model3D) {
-      data.append("model3D", model3D);
     }
 
     try {
@@ -133,10 +113,8 @@ const AddProducts = () => {
     });
     setPreview(product.img);
     setImg(null);
-    setModel3D(null);
     setEditingId(product._id);
     document.getElementById("file-input").value = "";
-    document.getElementById("model-input").value = "";
   };
 
   const handleDelete = async (id) => {
@@ -165,11 +143,9 @@ const AddProducts = () => {
       price: "",
     });
     setImg(null);
-    setModel3D(null);
     setPreview(null);
     setEditingId(null);
     document.getElementById("file-input").value = "";
-    document.getElementById("model-input").value = "";
   };
 
   return (
@@ -247,20 +223,6 @@ const AddProducts = () => {
             alt="Preview"
             className="h-32 object-cover mt-2 rounded"
           />
-        )}
-
-        {/* GLB Upload */}
-        <input
-          id="model-input"
-          type="file"
-          accept=".glb"
-          onChange={handleModelChange}
-          className="w-full p-2 border rounded"
-        />
-        {model3D && (
-          <p className="text-sm text-gray-500 mt-1">
-            Selected model: <span className="font-medium">{model3D.name}</span>
-          </p>
         )}
 
         <button

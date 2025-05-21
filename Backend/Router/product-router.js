@@ -4,23 +4,19 @@ const mongoose = require("mongoose");
 const Product = require("../Models/productModel");
 const multer = require("multer");
 
-// Multer config
+// Multer config (only for image)
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // CREATE: Add product
-router.post("/", upload.fields([
-  { name: "img", maxCount: 1 },
-  { name: "model3D", maxCount: 1 }
-]), async (req, res) => {
+router.post("/", upload.single("img"), async (req, res) => {
   try {
     const { sellername, email, description, productname, category, price } = req.body;
 
     const lastProduct = await Product.findOne().sort({ productid: -1 }).exec();
     const newProductId = lastProduct ? lastProduct.productid + 1 : 1;
 
-    const imageFile = req.files['img']?.[0];
-    const modelFile = req.files['model3D']?.[0];
+    const imageFile = req.file;
 
     const newProduct = new Product({
       productid: newProductId,
@@ -34,10 +30,6 @@ router.post("/", upload.fields([
       productname,
       category,
       price,
-      model3D: {
-        data: modelFile.buffer,
-        contentType: modelFile.mimetype,
-      }
     });
 
     await newProduct.save();
@@ -52,10 +44,13 @@ router.post("/", upload.fields([
   }
 });
 
-// READ: Get all products
+// READ: Get all or search products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const searchQuery = req.query.search || "";
+    const regex = new RegExp(searchQuery, "i");
+
+    const products = await Product.find({ productname: regex });
 
     const formattedProducts = products.map((product) => {
       let base64Image = null;
@@ -80,8 +75,28 @@ router.get("/", async (req, res) => {
 
     res.status(200).json(formattedProducts);
   } catch (error) {
-    console.error("❌ Error fetching products:", error);
-    res.status(500).json({ message: "Server error while fetching products", error });
+    console.error("❌ Error fetching products:", error.message);
+    res.status(500).json({ message: "Server error while fetching products", error: error.message });
+  }
+});
+
+// READ: Get products by productid list
+router.post("/by-ids", async (req, res) => {
+  try {
+    let { ids } = req.body;
+
+    if (!Array.isArray(ids)) {
+      return res.status(400).json({ message: "Expected an array of IDs" });
+    }
+
+    ids = ids.map((id) => Number(id));
+
+    const products = await Product.find({ productid: { $in: ids } });
+
+    res.status(200).json(products);
+  } catch (err) {
+    console.error("Error in /products/by-ids:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -146,42 +161,6 @@ router.put("/:id", upload.single("img"), async (req, res) => {
   } catch (error) {
     console.error("❌ Error updating product:", error.message);
     res.status(500).json({ message: "❌ Server error while updating product", error: error.message });
-  }
-});
-
-// GET: Search or get all products
-router.get("/", async (req, res) => {
-  try {
-    const searchQuery = req.query.search || "";
-    const regex = new RegExp(searchQuery, "i"); // Case-insensitive regex
-
-    const products = await Product.find({ productname: regex });
-
-    const formattedProducts = products.map((product) => {
-      let base64Image = null;
-
-      if (product.img?.data) {
-        const buffer = product.img.data;
-        const mimeType = product.img.contentType;
-        base64Image = `data:${mimeType};base64,${buffer.toString("base64")}`;
-      }
-
-      return {
-        _id: product._id,
-        sellername: product.sellername,
-        email: product.email,
-        productname: product.productname,
-        description: product.description,
-        category: product.category,
-        price: product.price,
-        img: base64Image,
-      };
-    });
-
-    res.status(200).json(formattedProducts);
-  } catch (error) {
-    console.error("❌ Error fetching products:", error.message);
-    res.status(500).json({ message: "Server error while fetching products", error: error.message });
   }
 });
 
