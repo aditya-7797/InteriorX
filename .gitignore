@@ -1,4 +1,15 @@
 node_modules/
 venv/
 .env
+requirements.txt
 .DS_Store
+echo "# MERN + Flask ML App" >> README.md
+dataset/images/*
+!dataset/images/.gitkeep 
+    
+dataset/
+ML/captions.json
+ML/image_filenames.pkl
+ML/image_retrieval_model.pkl
+
+
